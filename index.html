@@ -1,81 +1,702 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GS-SLAM-Family</title>
+  <meta charset="UTF-8">
 
-```
-<style>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Realtime Gaussian Splatting SLAM projects from the Lab of Artificial Intelligence and Robotics at Sungkyunkwan University."
+  >
+
+  <title>Realtime Gaussian Splatting SLAM</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700&family=Roboto:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-        font-family: Arial, sans-serif;
-        max-width: 900px;
-        margin: 60px auto;
-        padding: 0 20px;
-        line-height: 1.6;
+      margin: 0;
+      background: #ffffff;
+      color: #222222;
+      font-family: "Roboto", Arial, Helvetica, sans-serif;
     }
 
-    h1 {
-        margin-bottom: 10px;
+    /* =========================
+       Main header
+       ========================= */
+
+    .page-header {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 58px 30px 22px;
+      text-align: center;
     }
 
-    p {
-        color: #555;
+    .main-title {
+      margin: 0 0 15px;
+      color: #000000;
+      font-family: "Inter", sans-serif;
+      font-size: clamp(32px, 4vw, 50px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
     }
 
-    .section {
-        margin-top: 40px;
+    .affiliation {
+      margin: 0;
+      color: #555555;
+      font-size: 19px;
+      font-weight: 500;
+      line-height: 1.6;
     }
 
-    ul {
-        padding-left: 20px;
+    .affiliation a {
+      color: #1e40af;
+      font-weight: 700;
+      text-decoration: none;
     }
-</style>
-```
 
+    .affiliation a:hover {
+      text-decoration: underline;
+    }
+
+    .update-text {
+      margin: 14px 0 0;
+      color: #777777;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    /* =========================
+       Three-column layout
+       ========================= */
+
+    .papers-section {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 45px 30px 80px;
+    }
+
+    .paper-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .paper-card {
+      --accent: #1e40af;
+
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+
+      padding: 42px 22px 22px;
+
+      background: #ffffff;
+      /* background: #fafbfc; */
+      border: 2px solid var(--accent);
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .paper-card.rgbd {
+      --accent: #1e40af;
+    }
+
+    .paper-card.rgb {
+      --accent: #2563eb;
+    }
+
+    .paper-card.lidar {
+      --accent: #45b2ed;
+    }
+
+    .paper-modality {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      z-index: 2;
+
+     
+      transform: translate(-50%, -50%);
+
+      margin: 0;
+      padding: 2px 18px;
+
+      background: #ffffff;
+      color: var(--accent);
+
+      font-family: "Inter", sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    /* =========================
+       Paper information
+       ========================= */
+
+    .paper-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 130px;
+      margin: 0 0 20px;
+      padding: 0 8px;
+
+      color: #222222;
+      font-family: "Inter", sans-serif;
+      font-size: 23px;
+      font-weight: 700;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+
+    .paper-conference {
+      margin: 0 0 13px;
+      color: #555555;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .paper-authors {
+      margin: 0;
+      color: #3f3f3f;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .paper-authors a {
+      color: #1e40af;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .paper-authors a:hover {
+      color: #2563eb;
+      text-decoration: underline;
+    }
+
+    .equal-contribution {
+      margin: 9px 0 0;
+      color: #777777;
+      font-size: 13px;
+    }
+
+    /* =========================
+       Resource buttons
+       ========================= */
+
+    .paper-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+
+      margin-top: auto;
+      padding-top: 25px;
+    }
+
+    .resource-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 9px 15px;
+
+      color: #ffffff;
+      background: #303030;
+      border-radius: 999px;
+
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+      text-decoration: none;
+
+      transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .resource-button:hover {
+      color: #ffffff;
+      background: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .resource-button:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    /* =========================
+       Paper image or video
+       ========================= */
+
+    .paper-media {
+      width: 100%;
+      margin: 24px 0 0;
+    }
+
+    .paper-media img,
+    .paper-media video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+
+      background: #eeeeee;
+      border: 1px solid #dddddd;
+      border-radius: 9px;
+      object-fit: cover;
+    }
+
+    .media-caption {
+      margin: 9px 0 0;
+      color: #777777;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    /* =========================
+       Footer
+       ========================= */
+
+    .page-footer {
+      padding: 30px 20px 45px;
+      color: #777777;
+      border-top: 1px solid #eeeeee;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .page-footer p {
+      margin: 0;
+    }
+
+    .page-footer a {
+      color: #1e40af;
+      text-decoration: none;
+    }
+
+    .page-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* =========================
+       Responsive layout
+       ========================= */
+
+    @media (max-width: 1000px) {
+      .paper-grid {
+        grid-template-columns: 1fr;
+        gap: 55px;
+      }
+
+      .paper-card {
+        width: 100%;
+        max-width: 680px;
+        margin: 0 auto;
+      }
+
+      .paper-title {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .page-header {
+        padding: 42px 18px 18px;
+      }
+
+      .main-title {
+        font-size: 34px;
+        letter-spacing: -0.7px;
+      }
+
+      .affiliation {
+        font-size: 16px;
+      }
+
+      .papers-section {
+        padding: 38px 17px 60px;
+      }
+
+      .paper-card {
+        padding: 36px 18px 18px;
+      }
+
+      .paper-modality {
+        padding: 2px 14px;
+        font-size: 24px;
+      }
+
+      .paper-title {
+        padding: 0;
+        font-size: 19px;
+      }
+
+      .resource-button {
+        padding: 9px 13px;
+        font-size: 12px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-```
-<h1>GS-SLAM-Family</h1>
+  <main>
 
-<p>
-    A collection of Gaussian Splatting based SLAM systems,
-    including RGB, RGB-D, and LiDAR approaches.
-</p>
+    <!-- Main title and affiliation -->
+    <header class="page-header">
 
-<hr>
+      <h1 class="main-title">
+        Realtime Gaussian Splatting SLAM
+      </h1>
 
-<div class="section">
-    <h2>Overview</h2>
+      <p class="affiliation">
+        <a
+          href="https://lair.skku.edu/home/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Lab. of Artificial Intelligence and Robotics (LAIR)
+        </a>
+      </p>
+
+      <p class="update-text">
+        Page will be updated soon.
+      </p>
+
+    </header>
+
+
+    <!-- Three papers -->
+    <section class="papers-section">
+      <div class="paper-grid">
+
+
+        <!-- =====================================
+             RGBD: GS-ICP SLAM
+             ===================================== -->
+
+        <article class="paper-card rgbd">
+
+          <p class="paper-modality">
+            RGBD
+          </p>
+
+          <h2 class="paper-title">
+            RGBD GS-ICP SLAM<br>
+            (100FPS Gaussian Splatting SLAM)
+          </h2>
+
+          <p class="paper-conference">
+            ECCV 2024
+          </p>
+
+          <p class="paper-authors">
+            <a href="https://riboha.github.io" target="_blank" rel="noopener noreferrer">Seongbo Ha</a>, <a href="https://humdrum-balance-b8f.notion.site/Jiung-Yeon-6754922a22814c9a95af88801a96fb4b" target="_blank" rel="noopener noreferrer">Jiung Yeon</a>, <a href="https://bogus2000.github.io/" target="_blank" rel="noopener noreferrer">Hyeonwoo Yu</a>
+          </p>
+
+          <nav
+            class="paper-links"
+            aria-label="GS-ICP SLAM resources"
+          >
+
+            <a
+              class="resource-button"
+              href="https://arxiv.org/abs/2403.12550"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              arXiv
+            </a>
+
+            <a
+              class="resource-button"
+              href="static/pdfs/gs_icp_slam.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              PDF
+            </a>
+
+            <a
+              class="resource-button"
+              href="https://github.com/Lab-of-AI-and-Robotics/GS_ICP_SLAM"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>
+
+            <a
+              class="resource-button"
+              href="youtube.com/watch?v=e-bHh_uMMxE&feature=youtu.be"
+            >
+              Video
+            </a>
+
+          </nav>
+
+          <figure
+            class="paper-media"
+            id="gs-icp-media"
+          >
+            <video
+              controls
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              poster="static/images/gs_icp_slam.jpg"
+            >
+              <source
+                src="static/videos/gs_icp_slam.mp4"
+                type="video/mp4"
+              >
+
+              Your browser does not support the video tag.
+            </video>
+
+            <figcaption class="media-caption">
+              RGBD GS-ICP SLAM
+            </figcaption>
+          </figure>
+
+        </article>
+
+
+        <!-- =====================================
+             RGB: GSO-SLAM
+             ===================================== -->
+
+        <article class="paper-card rgb">
+
+          <p class="paper-modality">
+            RGB
+          </p>
+
+          <h2 class="paper-title">
+            GSO-SLAM: Bidirectionally Coupled Gaussian Splatting
+            and Direct Visual Odometry
+          </h2>
+
+          <p class="paper-conference">
+            RAL 2026
+          </p>
+
+          <p class="paper-authors">
+            <a href="https://yyonyy.github.io/" target="_blank" rel="noopener noreferrer">Jiung Yeon</a><sup>*</sup>, <a href="https://riboha.github.io" target="_blank" rel="noopener noreferrer">Seongbo Ha</a><sup>*</sup>, <a href="https://bogus2000.github.io/" target="_blank" rel="noopener noreferrer">Hyeonwoo Yu</a>
+          </p>
+
+          <p class="equal-contribution">
+            * Equal Contribution
+          </p>
+
+          <nav
+            class="paper-links"
+            aria-label="GSO-SLAM resources"
+          >
+
+            <a
+              class="resource-button"
+              href="https://arxiv.org/abs/2602.11714"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              arXiv
+            </a>
+
+            <a
+              class="resource-button"
+              href="static/pdfs/gso_slam.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              PDF
+            </a>
+
+            <a
+              class="resource-button"
+              href="https://github.com/Lab-of-AI-and-Robotics/GSO-SLAM"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>
+
+            <a
+              class="resource-button"
+              href="youtube.com/watch?v=io5RmjNzkik&feature=youtu.be"
+            >
+              Video
+            </a>
+
+          </nav>
+
+          <figure
+            class="paper-media"
+            id="gso-slam-media"
+          >
+            <video
+              controls
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              poster="static/images/gso_slam.jpg"
+            >
+              <source
+                src="static/videos/gso_slam.mp4"
+                type="video/mp4"
+              >
+
+              Your browser does not support the video tag.
+            </video>
+
+            <figcaption class="media-caption">
+              GSO-SLAM
+            </figcaption>
+          </figure>
+
+        </article>
+
+
+        <!-- =====================================
+             LiDAR Gaussian Splatting SLAM
+             ===================================== -->
+
+        <article class="paper-card lidar">
+
+          <p class="paper-modality">
+            LiDAR
+          </p>
+
+          <h2 class="paper-title">
+            Real-Time LiDAR Gaussian Splatting SLAM
+            via Geometry-Aware Covariance Coupling
+          </h2>
+
+          <p class="paper-conference">
+            ECCV 2026
+          </p>
+
+          <p class="paper-authors">
+            <a href="https://takseungjun.github.io/Taksume.github.io/" target="_blank" rel="noopener noreferrer">SeungJun Tak</a><sup>*</sup>, <a href="https://yyonyy.github.io/" target="_blank" rel="noopener noreferrer">Yewon Jeon</a><sup>*</sup>, <a href="https://jaeik-hwang.github.io/" target="_blank" rel="noopener noreferrer">Jaeik Hwang</a>, <a href="https://github.com/flyingKangaroo1" target="_blank" rel="noopener noreferrer">Suk Min Hwang</a>, <a href="https://riboha.github.io" target="_blank" rel="noopener noreferrer">Seongbo Ha</a>, <a href="https://bogus2000.github.io/" target="_blank" rel="noopener noreferrer">Hyeonwoo Yu</a>
+          </p>
+
+          <p class="equal-contribution">
+            * Equal Contribution
+          </p>
+
+          <nav
+            class="paper-links"
+            aria-label="LiDAR Gaussian Splatting SLAM resources"
+          >
+
+            <a
+              class="resource-button"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              arXiv
+            </a>
+
+            <a
+              class="resource-button"
+              href="static/pdfs/lidar_gs_slam.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              PDF
+            </a>
+
+            <a
+              class="resource-button"
+              href="https://github.com/Lab-of-AI-and-Robotics/LiDAR-GS-SLAM"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>
+
+            <a
+              class="resource-button"
+              href="#lidar-gs-slam-media"
+            >
+              Video
+            </a>
+
+          </nav>
+
+          <figure
+            class="paper-media"
+            id="lidar-gs-slam-media"
+          >
+            <video
+              controls
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              poster="static/images/lidar_gs_slam.jpg"
+            >
+              <source
+                src="static/videos/lidar_gs_slam.mp4"
+                type="video/mp4"
+              >
+
+              Your browser does not support the video tag.
+            </video>
+
+            <figcaption class="media-caption">
+              Real-Time LiDAR Gaussian Splatting SLAM
+            </figcaption>
+          </figure>
+
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <footer class="page-footer">
     <p>
-        GS-SLAM-Family provides a curated collection of
-        Gaussian Splatting SLAM papers, code repositories,
-        and project resources.
+      Realtime Gaussian Splatting SLAM ·
+      <a
+        href="https://lair.skku.edu/home/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Lab. of Artificial Intelligence and Robotics (LAIR)
+      </a>
     </p>
-</div>
-
-<div class="section">
-    <h2>Categories</h2>
-    <ul>
-        <li>RGB GS-SLAM</li>
-        <li>RGB-D GS-SLAM</li>
-        <li>LiDAR GS-SLAM</li>
-    </ul>
-</div>
-
-<div class="section">
-    <h2>Coming Soon</h2>
-    <ul>
-        <li>Paper List</li>
-        <li>Project Pages</li>
-        <li>GitHub Repositories</li>
-        <li>Benchmarks and Datasets</li>
-    </ul>
-</div>
-```
+  </footer>
 
 </body>
 </html>
