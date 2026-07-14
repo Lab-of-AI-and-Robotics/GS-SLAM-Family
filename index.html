@@ -516,6 +516,16 @@
       object-fit: cover;
     }
 
+    .demo-gif {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      margin-top: 12px;
+      border: 1px solid #dddddd;
+      background: #f3f4f6;
+      object-fit: cover;
+    }
+
     .media-caption {
       margin: 9px 0 0;
       color: #777777;
@@ -924,21 +934,13 @@
             (100FPS Gaussian Splatting SLAM)
           </h2>
 
-          <figure class="demo-media" aria-label="RGBD GS-ICP SLAM demo video">
-            <video
-              controls
-              muted
-              loop
-              playsinline
-              preload="metadata"
-              poster="static/images/gs_icp_slam.jpg"
+          <figure class="demo-media" aria-label="RGBD GS-ICP SLAM animated preview">
+            <img
+              src="gif/ProjectPageVideo-gsicp.gif"
+              alt="RGBD GS-ICP SLAM animated preview"
+              class="demo-gif"
+              loading="lazy"
             >
-              <source
-                src="static/videos/gs_icp_slam.mp4"
-                type="video/mp4"
-              >
-              Your browser does not support the video tag.
-            </video>
           </figure>
 
           <p class="paper-conference">
@@ -1019,7 +1021,7 @@
               </span>
             </button>
             <figcaption class="media-caption">
-              Overview figure · Click to enlarge
+              Overview figure
             </figcaption>
           </figure>
 
@@ -1041,21 +1043,13 @@
             and Direct Visual Odometry
           </h2>
 
-          <figure class="demo-media" aria-label="GSO-SLAM demo video">
-            <video
-              controls
-              muted
-              loop
-              playsinline
-              preload="metadata"
-              poster="static/images/gso_slam.jpg"
+          <figure class="demo-media" aria-label="GSO-SLAM animated preview">
+            <img
+              src="gif/ProjectPageVideo-gso.gif"
+              alt="GSO-SLAM animated preview"
+              class="demo-gif"
+              loading="lazy"
             >
-              <source
-                src="static/videos/gso_slam.mp4"
-                type="video/mp4"
-              >
-              Your browser does not support the video tag.
-            </video>
           </figure>
 
           <p class="paper-conference">
@@ -1140,7 +1134,7 @@
               </span>
             </button>
             <figcaption class="media-caption">
-              Overview figure · Click to enlarge
+              Overview figure
             </figcaption>
           </figure>
 
@@ -1162,21 +1156,13 @@
             via Geometry-Aware Covariance Coupling
           </h2>
 
-          <figure class="demo-media" aria-label="LiDAR Gaussian Splatting SLAM demo video">
-            <video
-              controls
-              muted
-              loop
-              playsinline
-              preload="metadata"
-              poster="static/images/lidar_gs_slam.jpg"
+          <figure class="demo-media" aria-label="LiDAR Gaussian Splatting SLAM animated preview">
+            <img
+              src="gif/ProjectPageVideo-lidar.gif"
+              alt="LiDAR Gaussian Splatting SLAM animated preview"
+              class="demo-gif"
+              loading="lazy"
             >
-              <source
-                src="static/videos/lidar_gs_slam.mp4"
-                type="video/mp4"
-              >
-              Your browser does not support the video tag.
-            </video>
           </figure>
 
           <p class="paper-conference">
@@ -1261,7 +1247,7 @@
               </span>
             </button>
             <figcaption class="media-caption">
-              Overview figure · Click to enlarge
+              Overview <figure></figure>
             </figcaption>
           </figure>
 
